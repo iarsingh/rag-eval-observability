@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rag-eval-observability
+  labels:
+    app: rag-eval-observability
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rag-eval-observability
+  template:
+    metadata:
+      labels:
+        app: rag-eval-observability
+    spec:
+      containers:
+        - name: api
+          image: rag-eval-observability:local
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /v1/readyz
+              port: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rag-eval-observability
+spec:
+  selector:
+    app: rag-eval-observability
+  ports:
+    - port: 80
+      targetPort: 8080

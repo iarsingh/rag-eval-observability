@@ -1,6 +1,8 @@
+from ragevalx.ops import router as ops_router
 from fastapi import FastAPI
 from ragevalx.score import evaluate
 app = FastAPI(title="RAG Evaluation Observability")
+app.include_router(ops_router, prefix="/v1")
 
 @app.get("/healthz")
 def healthz():
